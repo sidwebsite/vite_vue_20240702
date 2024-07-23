@@ -17,20 +17,20 @@
             <div class="col-lg-4 col-md-6">
                 <div class="select">
                     <label>時間</label>
-                    <v-select :options="dateOptions" placeholder="所有時間"></v-select>
+                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOptino"></v-select>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="select">
                     <label>產品</label>
-                    <v-select :options="productOptions" placeholder="所有產品"></v-select>
+                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOptino"></v-select>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="select d-flex align-items-center">
                     <div class="input-group">
-                        <input type="text" class="form-control border-0 px-0 bg-transparent" placeholder="請輸入關鍵字">
-                        <button type="button" class="btn input-group-text" id=""><i class="fa-regular fa-magnifying-glass"></i></button>
+                        <input type="text" class="form-control border-0 px-0 bg-transparent" placeholder="請輸入關鍵字" v-model="searchWords">
+                        <span type="button" class="btn input-group-text" id=""><i class="fa-regular fa-magnifying-glass"></i></span>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
         <!-- pagination start -->
         <div class="text-center">
             <div class="d-inline-block">
-                <Pagepagination :pages="pages" @emit-page="getcurrPage"></Pagepagination>
+                <Pagepagination :total="total" :pageInit="pageInit" @emit-page="getcurrPage"></Pagepagination>
             </div>                                
         </div>
         <!-- pagination end -->
@@ -77,11 +77,12 @@
             return {
                 data: [],
                 paginatedData: null,
-                pages: {
-                    paginationLimit: 5,
-                    pageInit: 1,
-                    pageCount: 0
-                }
+                paginationLimit: 5,
+                pageInit: 1,
+                pageCount: 0,
+                dateTimeOptino: '',
+                productOptino: '',
+                searchWords: ''
             }
         },
         components: {
@@ -91,12 +92,23 @@
             this.getData()
         },
         computed: {
+            searching() {
+                if(!this.searchWords && this.dateTimeOptino === '' && this.productOptino === '') {
+                    return this.data
+                } else {
+                    return this.data.filter(item => item.Name.includes(this.searchWords) && item.DataTime.includes(this.dateTimeOptino) && item.Tag !== null ? item.Tag.join().includes(this.productOptino) : false);
+                }
+            },
             displayData () {
-                return this.data.slice((this.pages.pageInit - 1) * this.pages.paginationLimit, this.pages.paginationLimit * this.pages.pageInit)
+                return this.searching.slice((this.pageInit - 1) * this.paginationLimit, this.paginationLimit * this.pageInit)
+            },
+            total() {
+                const pageCount =  Math.ceil(this.searching.length / this.paginationLimit)
+                return pageCount
             },
             dateOptions() {
                 const dateTime = []
-                this.data.forEach(item => {
+                this.searching.forEach(item => {
                     const year = new Date(item.DataTime).getFullYear()
                     if(dateTime.indexOf(year) === -1) {
                         dateTime.push(year)
@@ -106,7 +118,7 @@
             },
             productOptions() {
                 const product = []
-                this.data.forEach(item => {
+                this.searching.forEach(item => {
                     if(item.Tag !== null) {
                         item.Tag.forEach(val => {
                             if(product.indexOf(val) === -1) {
@@ -118,17 +130,21 @@
                 return product
             }
         },
+        watch: {
+            search() {
+                this.pageInit = 1
+            },
+        },
         methods: {
             getData() {
                 this.data = news.news
-                this.pages.pageCount = Math.ceil(this.data.length / this.pages.paginationLimit)
                 // this.$http.get(api).then((response) => {
                 //     const res = response.data.datatable[0]
                     
                 // })
             },
             getcurrPage(num) {
-                this.pages.pageInit = num
+                this.pageInit = num
             },
             getWeek(date) {
                 let result = ''

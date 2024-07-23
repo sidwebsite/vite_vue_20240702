@@ -56,10 +56,7 @@
                     </div>
                 </article>
                 <!-- share -->
-                <div class="share">
-                    <button type="button"><i class="fa-brands fa-line"></i></button>
-                    <button type="button"><i class="fa-brands fa-facebook-f"></i></button>
-                </div>
+                <SocialSharing></SocialSharing>
             </div>
         </section>
         <!-- content end -->
@@ -71,6 +68,7 @@
     import Vue3StickySidebar from "vue3-sticky-sidebar";
     import NewsProduct from "../../components/news/NewsProduct.vue";
     import VideoContentLists from "../../components/news/VideoContentLists.vue";
+    import SocialSharing from '../../components/SocialSharing.vue'
     import { news } from '../../assets/json/data.json'
     export default {
         data() {
@@ -88,7 +86,8 @@
         components: {
             Vue3StickySidebar,
             NewsProduct,
-            VideoContentLists
+            VideoContentLists,
+            SocialSharing
         },
         watch: {
             $route(to, from){

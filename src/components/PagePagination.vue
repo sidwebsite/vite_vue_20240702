@@ -1,18 +1,18 @@
 <template>
     <div id="pagination" class="pagination">
-        <button class="pagination-button" title="Previous page" aria-label="Previous page" @click="currentPage(1)" v-show="pages.pageInit !== 1">
+        <button class="pagination-button" title="Previous page" aria-label="Previous page" @click="currentPage(1)" v-show="pageInit !== 1">
             <i class="fa-solid fa-angles-left"></i>
         </button>
-        <button class="pagination-button" title="Previous page" aria-label="Previous page" @click="prevPage(pages.pageInit)" v-show="pages.pageInit !== 1">
+        <button class="pagination-button" title="Previous page" aria-label="Previous page" @click="prevPage(pageInit)" v-show="pageInit !== 1">
             <i class="fa-solid fa-angle-left"></i>
         </button>
         <ul class="pagination-numbers">
-            <li class="number" v-for="page in pages.pageCount" :key="page" :class="{ 'active': page === pages.pageInit }" @click.prevent="currentPage(page)"><span>{{ page }}</span></li>
+            <li class="number" v-for="page in total" :key="page" :class="{ 'active': page === pageInit }" @click.prevent="currentPage(page)"><span>{{ page }}</span></li>
         </ul>
-        <button class="pagination-button" title="Next page" aria-label="Next page" @click="nextPage(pages.pageInit)" v-show="pages.pageInit !== pages.pageCount">
+        <button class="pagination-button" title="Next page" aria-label="Next page" @click="nextPage(pageInit)" v-show="pageInit !== total">
             <i class="fa-solid fa-angle-right"></i>
         </button>
-        <button class="pagination-button" title="Next page" aria-label="Next page" @click="currentPage(pages.pageCount)" v-show="pages.pageInit !== pages.pageCount">
+        <button class="pagination-button" title="Next page" aria-label="Next page" @click="currentPage(total)" v-show="pageInit !== total">
             <i class="fa-solid fa-angles-right"></i>
         </button>
     </div>
@@ -20,17 +20,17 @@
 
 <script>
 export default {
-    props: ['pages'],
+    props: ['total', 'pageInit'],
     methods: {
         prevPage(numPage) {
-            if (this.pages.pageInit !== 1) {
+            if (this.pageInit !== 1) {
                 numPage -= 1
                 this.$emit('emit-page', numPage)
             }
             this.scrollTo()
         },
         nextPage(numPage) {
-            if (this.pages.pageInit !== this.pages.pageCount) {
+            if (this.pageInit !== this.total) {
                 numPage += 1
                 this.$emit('emit-page', numPage)
             }
@@ -49,7 +49,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

@@ -17,7 +17,7 @@ export default {
             represents: [
                 {
                     Id: '1',
-                    name: 'securityScorecard',
+                    name: 'SsecurityScorecard',
                     pic: 'index_securityScorecard.png',
                 },
                 {

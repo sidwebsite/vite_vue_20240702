@@ -52,10 +52,7 @@
                 <div class="mw-760 pb-9">
                     <article class="news-body" v-html="description"></article>
                     <!-- share -->
-                    <div class="share">
-                        <button type="button"><i class="fa-brands fa-line"></i></button>
-                        <button type="button"><i class="fa-brands fa-facebook-f"></i></button>
-                    </div>
+                    <SocialSharing></SocialSharing>
                 </div>
             </section>
             <!-- content end -->
@@ -67,6 +64,7 @@
     import Vue3StickySidebar from "vue3-sticky-sidebar";
     import NewsProduct from "../../components/news/NewsProduct.vue";
     import NewsContentLists from '../../components/news/NewsContentLists.vue'
+    import SocialSharing from '../../components/SocialSharing.vue'
     import { news } from '../../assets/json/data.json'
     // const api = '../assets/json/data.json'
     export default {
@@ -84,7 +82,8 @@
         components: {
             Vue3StickySidebar,
             NewsProduct,
-            NewsContentLists
+            NewsContentLists,
+            SocialSharing
         },
         watch: {
             $route(to, from){

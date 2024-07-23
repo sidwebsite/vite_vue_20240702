@@ -57,8 +57,7 @@
                 <!-- form end -->
                 <!-- share -->
                 <div class="share">
-                    <button type="button"><i class="fa-brands fa-line"></i></button>
-                    <button type="button"><i class="fa-brands fa-facebook-f"></i></button>
+                    <SocialSharing></SocialSharing>
                 </div>
             </div>
         </section>
@@ -70,6 +69,7 @@
     import Vue3StickySidebar from "vue3-sticky-sidebar";
     import { news } from '../../assets/json/data.json'
     import StatementsForm from '../../components/StatementsForm.vue'
+    import SocialSharing from '../../components/SocialSharing.vue'
     // const api = '../assets/json/data.json'
     export default {
         data() {
@@ -85,7 +85,8 @@
         name: "ServeDev",
         components: {
             Vue3StickySidebar,
-            StatementsForm
+            StatementsForm,
+            SocialSharing
         },
         created() {
             const id = this.$route.params.statementsId

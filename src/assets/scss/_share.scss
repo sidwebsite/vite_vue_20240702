@@ -2,9 +2,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    > button {
+    > a {
         border: 0;
-        background-color: var(--transparent);
+        color: var(--gray-900);
+        text-decoration: none;
         outline: none;
         box-shadow: none;
         display: flex;
@@ -15,7 +16,7 @@
         font-size: toRem(16px);
         transition: var(--base-transition);
         &:hover {
-            color: var(--secondary);
+            color: var(--secondary) !important;
         }
     }
 }

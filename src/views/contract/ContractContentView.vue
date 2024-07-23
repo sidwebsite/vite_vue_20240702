@@ -47,9 +47,9 @@
                     <tbody v-html="description"></tbody>
                 </table>
             </div>
-            <div class="contract-download">
+            <!-- <div class="contract-download">
                 <a href="#" download="" class="btn-contact">檔案下載</a>
-            </div>
+            </div> -->
         </div>
     </section>
     <Lists :contractData="data" @emid-id="getcurrId"></Lists>

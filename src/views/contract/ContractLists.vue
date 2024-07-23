@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <div class="select">
                         <label>廠牌</label>
-                        <v-select :options="options" placeholder="所有廠牌"></v-select>
+                        <v-select :options="options" placeholder="所有廠牌" v-model="brandOption" @change="brandOption"></v-select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -54,7 +54,7 @@
             <!-- pagination start -->
             <div class="text-center">
                 <div class="d-inline-block">
-                    <Pagepagination :pages="pages" @emit-page="getcurrPage"></Pagepagination>
+                    <Pagepagination :total="total" :pageInit="pageInit" @emit-page="getcurrPage"></Pagepagination>
                 </div>                                
             </div>
             <!-- pagination end -->
@@ -71,12 +71,11 @@
             return {
                 data: [],
                 paginatedData: null,
-                pages: {
-                    paginationLimit: 6,
-                    pageInit: 1,
-                    pageCount: 0
-                },
-                searchWords: ''
+                paginationLimit: 6,
+                pageInit: 1,
+                pageCount: 0,
+                searchWords: '',
+                brandOption: ''
             }
         },
         components: {
@@ -86,39 +85,46 @@
             this.getData()
         },
         computed: {
+            searching() {
+                if(!this.searchWords && this.brandOption === null) {
+                    return this.data
+                } else {
+                    return this.data.filter(item => item.Name.includes(this.searchWords) && item.product.includes(this.brandOption));
+                }
+            },
             displayData() {
-                let data = this.data.filter(item => item.Name.match(this.searchWords));
-                return data.slice((this.pages.pageInit - 1) * this.pages.paginationLimit, this.pages.paginationLimit * this.pages.pageInit)
+                return this.searching.slice((this.pageInit - 1) * this.paginationLimit, this.paginationLimit * this.pageInit)
+            },
+            total() {
+                const pageCount =  Math.ceil(this.searching.length / this.paginationLimit)
+                return pageCount
             },
             options() {
                 const brand = []
-                this.data.forEach(item => {
+                this.searching.forEach(item => {
                     if(brand.indexOf(item.product) === -1) {
                         brand.push(item.product)
                     }
                 })
                 return brand
-            },
-            filterSearch() {
-                return this.data.filter(item => item.Name.match(this.searchWords));
             }
         },
-        watch: {},
+        watch: {
+            search() {
+                this.pageInit = 1;
+            },
+        },
         methods: {
             getData() {
                 this.data = contract
-                this.pages.pageCount = Math.ceil(this.data.length / this.pages.paginationLimit)
                 // this.$http.get(api).then((response) => {
                 //     const res = response.data.datatable[0]
                     
                 // })
             },
             getcurrPage(num) {
-                this.pages.pageInit = num
-            },
-            // searchFun() {
-            //     return this.data = contract.filter(searchResult => searchResult.Name.match(this.searchWords));
-            // }
+                this.pageInit = num
+            }
         }
     }
 </script>
